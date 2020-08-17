@@ -23,19 +23,33 @@ const Import: React.FC = () => {
   const history = useHistory();
 
   async function handleUpload(): Promise<void> {
-    // const data = new FormData();
+     const data = new FormData();
 
-    // TODO
+     if(!uploadedFiles.length) return //se nao tiver arquivo retorna e nao faz nada
+
+     const file = uploadedFiles[0] //formato single, por isso so pegamos o primeiro arquivo mesmo
+
+     // Formato de append usado: (name, value, filename)
+    data.append('file', file.file, file.name) //nome que ta setado no backend, o arquivo, o nome
 
     try {
-      // await api.post('/transactions/import', data);
+       await api.post('/transactions/import', data);
+
+       history.push('/')
     } catch (err) {
-      // console.log(err.response.error);
+       console.log(err.response.error);
     }
   }
 
   function submitFile(files: File[]): void {
-    // TODO
+    const uploadFiles = files.map(file => ({
+      file,
+      name: file.name, //setando o nome do arquivo
+      readableSize: filesize(file.size), //setandno um tamanho legivel em MB ou KB
+    })
+
+    )
+      setUploadedFiles(uploadFiles)
   }
 
   return (
