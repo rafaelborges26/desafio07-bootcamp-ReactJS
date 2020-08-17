@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
       const transactionFormatted = response.data.transactions.map(
         (transaction: Transaction) => ({
           ...transaction, //pegando todos os valores (type, title... e incluindo o formattedValue)
-          formattedValue: formatValue(transaction.value), //transaction.type === 'outcome' ? '-'.concat(formatValue(transaction.value)) : formatValue(transaction.value),
+          formattedValue: transaction.type === 'outcome' ? '- '.concat(formatValue(transaction.value)) : formatValue(transaction.value),
           formattedDate: new Date(transaction.created_at).toLocaleDateString('pt-br') //transformar em date
         })
       )
@@ -104,11 +104,8 @@ const Dashboard: React.FC = () => {
     {transactions.map(transaction => (
               <tr key={transaction.id}>
               <td className="title">{transaction.title}</td>
-              <td className={transaction.type}>{
-                transaction.type === 'outcome' && '-'}
-                {transaction.formattedValue}
-                </td>
-              <td>{transaction.type}</td>
+              <td className={transaction.type}>{transaction.formattedValue}</td>
+              <td>{transaction.category.title}</td>
               <td>{transaction.formattedDate}</td>
               </tr>
     ))}
